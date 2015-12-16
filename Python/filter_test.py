@@ -44,4 +44,4 @@ plt.stem(Ycn)
 plt.axis([0, Ns*Rs, -0.5, 1.5])
 gca.suptitle('Chebyshev II Output With WGN', fontsize = 18)
 
-plt.show()
+plt.show(block=false)
