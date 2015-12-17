@@ -5,7 +5,7 @@ Admin:
 Paul Czeresko
 czeresko@email.sc.edu
 
-Team members:
-Andrew Daskalakis
-Ryun Farmer
+Team members:\n
+Andrew Daskalakis\n
+Ryun Farmer\n
 Michael Strothers
