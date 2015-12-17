@@ -1,11 +1,17 @@
 # Capstone-Design-Project
-Python code for ELCT 403/404
+Code for ELCT 403/404 2015-2016
+
 
 Admin:
+
 Paul Czeresko
+
 czeresko@email.sc.edu
 
-Team members:\n
-Andrew Daskalakis\n
-Ryun Farmer\n
+Team members:
+
+Andrew Daskalakis
+
+Ryun Farmer
+
 Michael Strothers
