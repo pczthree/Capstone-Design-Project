@@ -6,7 +6,7 @@ CENTER = 1500
 list_size = 10
 pw_array = [CENTER for i in range(list_size)]
 
-def measurePulseWidth(pin):
+def measure_pw(pin):
 	"""Returns pulse width in seconds of a square wave on pin *pin*"""
 	gpio.wait_for_edge(pin, gpio.RISING)
 	start = time.time()
@@ -19,13 +19,13 @@ def measurePulseWidth(pin):
 	else:
 		return pw_avg
 
-def measurePulseWidthMicro(pin):
+def measure_pw_us(pin):
 	"""Returns pulse width in microseconds of a square wave on pin *pin*"""
 	return 1000000*measurePulseWidth(pin)
 
 # This function works with increasing frequency. If the frequency rises
 # above 100 Hz then falls below, it multiplies by 10
-def measurePWMFrequency(pin):
+def measure_freq(pin):
 	""" Returns the frequency in Hz of a square wave on pin *pin*"""
 	frequency = 0
 	start = time.time()
