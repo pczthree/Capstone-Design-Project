@@ -6,7 +6,7 @@ from scipy import signal as sig
 
 Ns = 10
 Rs = 10
-sens = 0.05
+sens = 0.01
 
 figCount = 1
 
