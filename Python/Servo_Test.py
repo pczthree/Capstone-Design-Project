@@ -16,6 +16,9 @@ filter_order = 4
 filter_freq = 0.4
 filter_atten = 40
 
+ic_input = np.zeros(filter_order) + 1500
+ic_filter = np.zeros(filter_order) + 1500
+
 cheby2 = ft.FilterTools(0, filter_order, filter_freq, 'low', filter_atten)
 
 #=========================
@@ -40,12 +43,30 @@ aileron_out = 0 # Servo driver board
 aileron = st.ServoTools(aileron_out, freq)
 
 #=========================
+# OPEN WRITE STREAM
+#=========================
+try:
+	os.remove('signal.csv')
+except WindowsError:
+	pass
+
+ofile = open('signal.csv','wb')
+w = csv.writer(ofile, delimiter=',',quoting=csv.QUOTE_NONE)
+
+#=========================
 # EXECUTE PROCESSES
 #=========================
 try:
 	while(True):
 		pw = int(mpw.measure_pw_us(CH1_IN))
-		aileron.set_pw(pw)
+		# aileron.set_pw(pw)
+
+		aileron_filt = cheby2.rtfilter(pw, ic_input, ic_filter)
+		aileron.set_pw(aileron_filt['y'])
+		ic_input = aileron_filt['ic_input']
+		ic_filter = aileron_filt['ic_filter']
+
+		w.writerow([pw, aileron_filt['y']])
 		stdout.write("\rPulse Width: %d" %pw)
 		stdout.flush()
 
@@ -53,3 +74,4 @@ except KeyboardInterrupt:
 	break
 
 aileron.reset()
+ofile.close()
