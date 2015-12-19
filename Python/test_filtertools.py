@@ -21,6 +21,6 @@ Ycn = filt1.filter(Xn)
 
 print filt1.rise_time()
 print filt1.overshoot()
-print filt1.rtfilter(7, np.arange(3), np.arange(3))
+print filt1.rtfilter(7, np.arange(3)+1, np.arange(3)+2)
 print filt1.get_coef()['b']
 print filt1.get_coef()['a']

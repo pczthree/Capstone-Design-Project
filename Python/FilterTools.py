@@ -100,5 +100,5 @@ class FilterTools(object):
 
 		this_filter[self.filter_order-1] = y
 
-		return {'y':this_filter[self.filter_order-1], 'ic_filter':this_filter}
+		return {'y':this_filter[self.filter_order-1], 'ic_input':this_input, 'ic_filter':this_filter}
 

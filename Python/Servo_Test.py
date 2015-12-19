@@ -58,6 +58,7 @@ w = csv.writer(ofile, delimiter=',',quoting=csv.QUOTE_NONE)
 #=========================
 try:
 	while(True):
+<<<<<<< HEAD
 		pw = int(mpw.measure_pw_us(CH1_IN))
 		# aileron.set_pw(pw)
 
@@ -67,11 +68,19 @@ try:
 		ic_filter = aileron_filt['ic_filter']
 
 		w.writerow([pw, aileron_filt['y']])
+=======
+		pw = int(mpw.measure_pw_us(aileron_in))
+		aileron.set_pw(pw)
+>>>>>>> master
 		stdout.write("\rPulse Width: %d" %pw)
 		stdout.flush()
 
 except KeyboardInterrupt:
 	break
 
+<<<<<<< HEAD
 aileron.reset()
 ofile.close()
+=======
+aileron.reset()
+>>>>>>> master
