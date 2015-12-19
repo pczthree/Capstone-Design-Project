@@ -64,33 +64,41 @@ class FilterTools(object):
 		m = max(s)
 		return round(float(m - 1), 3)
 
-	def rtfilter(self, new_input, ic_input=None,
-			ic_filter=None):
+	def rtfilter(self, new_input, ic_input=None, ic_filter=None):
 		"""Generates and applies IIR filter to an input
 		   Returns current output and sufficient past outputs to perform
 		   future filtering
 		"""
-		# make sure initial conditions match order length
 
 		if(ic_input==None):
 			ic_input = np.zeros(self.filter_order)
+		else:
+			if(len(ic_input) != self.filter_order):
+				raise IndexError(
+					"initial input conditions must be sufficient for filter order")
+
 		if(ic_filter==None):
 			ic_filter = np.zeros(self.filter_order)
+		else:
+			if(len(ic_filter) != self.filter_order):
+				raise IndexError(
+					"initial output conditions must be sufficient for filter order")
 
 		this_input = np.roll(ic_input, -1)
 		this_input[self.filter_order-1] = new_input
 
-		this_filter = np.roll(ic_input, -1)
-"""
+		this_filter = np.roll(ic_filter, -1)
+
 		ff = np.zeros(self.filter_order+1)
 		fb = np.zeros(self.filter_order+1)
-		for ii in range(self.filter_order+1):
-			ff[ii] = self.b[ii]*this_input[ii]
-			if ii < self.filter_order:
-				fb[ii] = self.b[ii]*this_filter[ii]
-		y = ff - fb
+		ff[0] = self.b[0]
+		fb[0] = self.a[0]
+		for ii in range(1,self.filter_order+1):
+			ff[ii] = self.b[ii]*this_input[ii-1]
+			fb[ii] = self.a[ii]*this_filter[ii-1]
+		y = sum(ff) - sum(fb)
 
 		this_filter[self.filter_order-1] = y
-"""
-#		return {'y':this_filter[self.filter], 'ic_filter':this_filter}
+
+		return {'y':this_filter[self.filter_order-1], 'ic_filter':this_filter}
 
