@@ -81,16 +81,16 @@ class FilterTools(object):
 		this_input[self.filter_order-1] = new_input
 
 		this_filter = np.roll(ic_input, -1)
-
+"""
 		ff = np.zeros(self.filter_order+1)
 		fb = np.zeros(self.filter_order+1)
 		for ii in range(self.filter_order+1):
-			ff[ii] = b[ii]*this_input[ii]
+			ff[ii] = self.b[ii]*this_input[ii]
 			if ii < self.filter_order:
-				fb[ii] = b[ii]*this_filter[ii]
+				fb[ii] = self.b[ii]*this_filter[ii]
 		y = ff - fb
 
 		this_filter[self.filter_order-1] = y
-
-		return {'y':this_filter[self.filter], 'ic_filter':this_filter}
+"""
+#		return {'y':this_filter[self.filter], 'ic_filter':this_filter}
 
