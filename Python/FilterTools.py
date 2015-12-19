@@ -2,8 +2,15 @@ import numpy as np
 from scipy import signal as sig
 
 class FilterTools(object):
-	"""Add doc later, because you think ahead -.-
-
+	"""This class allows the user to generate Chebychev II or Butterworth
+	filter coefficients and perform analysis and application. Contained within
+	are functions to:
+	Access coefficients
+	Apply filter to an array
+	Perform a discrete step response
+	Determine rise time
+	Determine overshoot
+	Filter in real time
 	"""
 
 	def __init__(self, filter_type, filter_order, filter_freq,
@@ -59,7 +66,10 @@ class FilterTools(object):
 
 	def rtfilter(self, new_input, ic_input=None,
 			ic_filter=None):
-		"""Add shit when you figure out what you're doing"""
+		"""Generates and applies IIR filter to an input
+		   Returns current output and sufficient past outputs to perform
+		   future filtering
+		"""
 		# make sure initial conditions match order length
 
 		if(ic_input==None):
