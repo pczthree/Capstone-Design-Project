@@ -15,9 +15,9 @@ print('PWM device initialized')
 #=========================
 # INITIALIZE FILTER	
 #=========================
-filter_order = 4
+filter_order = 2
 filter_freq = 0.4
-filter_atten = 40
+filter_atten = 20
 
 ic_input = np.zeros(filter_order) + 1500
 ic_filter = np.zeros(filter_order) + 1500
@@ -68,15 +68,15 @@ print('Write stream initialized')
 try:
 	while(True):
 		pw = int(pwt.measure_pw_us(aileron_in))
-		aileron.set_pw(pw)
+		# aileron.set_pw(pw)
 
-		# aileron_filt = cheby2.rtfilter(pw, ic_input, ic_filter)
-		# aileron.set_pw(aileron_filt['y'])
-		# ic_input = aileron_filt['ic_input']
-		# ic_filter = aileron_filt['ic_filter']
+		aileron_filt = cheby2.rtfilter(pw, ic_input, ic_filter)
+		aileron.set_pw(aileron_filt['y'])
+		ic_input = aileron_filt['ic_input']
+		ic_filter = aileron_filt['ic_filter']
 
-		# w.writerow([pw, aileron_filt['y']])
-		w.writerow([pw])
+		w.writerow([pw, aileron_filt['y']])
+		# w.writerow([pw])
 		stdout.write("\rPulse Width: %d" %pw)
 		stdout.flush()
 
