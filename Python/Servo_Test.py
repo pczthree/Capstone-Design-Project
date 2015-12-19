@@ -68,14 +68,15 @@ print('Write stream initialized')
 try:
 	while(True):
 		pw = int(pwt.measure_pw_us(aileron_in))
-		# aileron.set_pw(pw)
+		aileron.set_pw(pw)
 
-		aileron_filt = cheby2.rtfilter(pw, ic_input, ic_filter)
-		aileron.set_pw(aileron_filt['y'])
-		ic_input = aileron_filt['ic_input']
-		ic_filter = aileron_filt['ic_filter']
+		# aileron_filt = cheby2.rtfilter(pw, ic_input, ic_filter)
+		# aileron.set_pw(aileron_filt['y'])
+		# ic_input = aileron_filt['ic_input']
+		# ic_filter = aileron_filt['ic_filter']
 
-		w.writerow([pw, aileron_filt['y']])
+		# w.writerow([pw, aileron_filt['y']])
+		w.writerow([pw])
 		stdout.write("\rPulse Width: %d" %pw)
 		stdout.flush()
 
