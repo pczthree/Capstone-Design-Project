@@ -44,7 +44,7 @@ aileron = st.ServoTools(aileron_out, freq)
 #=========================
 try:
 	while(True):
-		pw = int(mpw.measure_pw_us(CH1_IN))
+		pw = int(mpw.measure_pw_us(aileron_in))
 		aileron.set_pw(pw)
 		stdout.write("\rPulse Width: %d" %pw)
 		stdout.flush()
@@ -53,3 +53,8 @@ except KeyboardInterrupt:
 	break
 
 aileron.reset()
+
+"""
+Add a feature
+It does stuff
+"""
