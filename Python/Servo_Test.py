@@ -53,8 +53,3 @@ except KeyboardInterrupt:
 	break
 
 aileron.reset()
-
-"""
-Add a feature
-It does stuff
-"""
