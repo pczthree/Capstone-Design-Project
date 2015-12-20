@@ -5,12 +5,26 @@ import numpy as np
 import PWMTools as pwt 
 import RPi.GPIO as gpio
 import ServoTools as st
-from sys import stdout
+import sys
 import time
+
+#=========================
+# VERBOSE MODE
+#=========================
+try:
+	if(sys.argv[1] == '-v'):
+		VERBOSE = True
+		print 'VERBOSE MODE'
+	else:
+		VERBOSE = False
+except IndexError:
+	VERBOSE = False
 
 # Initialise the PWM device using the default address
 pwm = PWM(0x40)
-print('PWM device initialized')
+
+if(VERBOSE):
+	print('PWM device initialized')
 
 #=========================
 # INITIALIZE FILTER	
@@ -24,7 +38,8 @@ ic_filter = np.zeros(filter_order) + 1500
 
 cheby2 = ft.FilterTools(0, filter_order, filter_freq, 'low', filter_atten)
 
-print('Filter initialized')
+if(VERBOSE):
+	print('Filter initialized')
 
 #=========================
 # INITIALIZE INPUTS	
@@ -34,7 +49,8 @@ aileron_in = 33 # BCM GPIO13
 gpio.setmode(gpio.BOARD)
 gpio.setup(aileron_in, gpio.IN)
 
-print('Inputs initialized')
+if(VERBOSE):
+	print('Inputs initialized')
 
 #=========================
 # DEFINE TIMING VARIABLES
@@ -43,7 +59,8 @@ freq = int(pwt.measure_freq(aileron_in))
 stdout.write("\rFrequency (Hz): %d\n" %freq)
 pulse_length = 1000000 / (freq * 4096)
 
-print('Timing variables initialized')
+if(VERBOSE):
+	print('Timing variables initialized')
 
 #=========================
 # INITIALIZE OUTPUTS	
@@ -51,7 +68,8 @@ print('Timing variables initialized')
 aileron_out = 0 # Servo driver board
 aileron = st.ServoTools(aileron_out, freq)
 
-print('Outputs initialized')
+if(VERBOSE):
+	print('Outputs initialized')
 
 #=========================
 # OPEN WRITE STREAM
@@ -60,7 +78,8 @@ print('Outputs initialized')
 ofile = open('signal.csv','wb')
 w = csv.writer(ofile, delimiter=',',quoting=csv.QUOTE_NONE)
 
-print('Write stream initialized')
+if(VERBOSE):
+	print('Write stream initialized')
 
 #=========================
 # EXECUTE PROCESSES
@@ -75,9 +94,10 @@ try:
 		ic_input = aileron_filt['ic_input']
 		ic_filter = aileron_filt['ic_filter']
 
-		w.writerow([pw, aileron_filt['y']])
-		stdout.write("\rPulse Width: %d" %pw)
-		stdout.flush()
+		if(VERBOSE):
+			w.writerow([pw, aileron_filt['y']])
+			stdout.write("\rPulse Width: %d" %pw)
+			stdout.flush()
 
 except KeyboardInterrupt:
 	pass
