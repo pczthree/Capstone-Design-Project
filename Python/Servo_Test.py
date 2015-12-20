@@ -65,17 +65,23 @@ print('Write stream initialized')
 #=========================
 # EXECUTE PROCESSES
 #=========================
+db = 50
 try:
 	while(True):
 		pw = int(pwt.measure_pw_us(aileron_in))
 		# aileron.set_pw(pw)
 
 		aileron_filt = cheby2.rtfilter(pw, ic_input, ic_filter)
-		aileron.set_pw(aileron_filt['y'])
+		pw_filt = aileron_filt['y']
+		if(np.absolute(pw - pw_old) > db):
+			# Change to pw for unfiltered process
+			aileron.set_pw(pw_filt)
+		# Below may need to be part of the deadband as well	
 		ic_input = aileron_filt['ic_input']
 		ic_filter = aileron_filt['ic_filter']
+		pw_old = pw
 
-		w.writerow([pw, aileron_filt['y']])
+		w.writerow([pw, pw_filt])
 		stdout.write("\rPulse Width: %d" %pw)
 		stdout.flush()
 
