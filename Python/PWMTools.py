@@ -9,16 +9,16 @@ def measure_pw(pin):
 	start = time.time()
 	gpio.wait_for_edge(pin, gpio.FALLING)
 	pw = time.time() - start
-	if(pw_avg > 2000):
-		return 2000
-	elif(pw_avg < 1000):
-		return 1000
+	if(pw > 0.002):
+		return 0.002
+	elif(pw < 0.001):
+		return 0.001
 	else:
-		return pw_avg
+		return pw
 
 def measure_pw_us(pin):
 	"""Returns pulse width in microseconds of a square wave on pin *pin*"""
-	return 1000000*measurePulseWidth(pin)
+	return 1000000 * measure_pw(pin)
 
 # This function works with increasing frequency. If the frequency rises
 # above 100 Hz then falls below, it multiplies by 10
