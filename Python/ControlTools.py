@@ -29,6 +29,7 @@ class ControlSurface(object)
 	def calibrate_ROM(self):
 		threshold = 50
 		x_ = self.neutral
+
 		#hold min
 		m = []
 		for ii in range (10):
@@ -62,7 +63,7 @@ class ControlSurface(object)
 			else:
 				c.append(pwt.measure_pw_us(channel))
 			x_ = x
-		self.center = sum(c)/len(c)
+		self.neutral = sum(c)/len(c)
 
 class Servo(ControlSurface):
 	def __init__(self, channel, freq, neutral=1500):
