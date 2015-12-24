@@ -66,11 +66,25 @@ class ControlSurface(object)
 		self.neutral = sum(c)/len(c)
 
 class Servo(ControlSurface):
-	def __init__(self, channel, freq, neutral=1500):
+	def __init__(self, channel, freq, neutral=1500, run=False):
 		super(Servo).__init__(self, channel, freq)
 		self.neutral = neutral
+		
+		if run:
+			self.main()
+
+	def main(self):
+		# update loop goes here
+		pass
 
 class ESC(ControlSurface):
-	def __init__(self, channel, freq, neutral=1000):
+	def __init__(self, channel, freq, neutral=1000, run=False):
 		super(ESC).__init__(self, channel, freq)
 		self.neutral = neutral
+
+		if run:
+			self.main()
+
+	def main(self):
+		# update loop goes here
+		pass
