@@ -4,7 +4,13 @@ import PWMTools as pwt
 import RPi.GPIO as gpio
 import ServoTools as st
 
-class ControlSurface(object)
+class ControlSurface(object):
+	"""This class provides access to PWMTools with additional features for
+	general control surface types. Contained within are functions to:
+	Reset to neutral
+	Set pulse width
+	Calibrate range of motion
+	"""
 
 	def __init__(self, channel, freq):
 		self.channel = channel
@@ -66,6 +72,7 @@ class ControlSurface(object)
 		self.neutral = sum(c)/len(c)
 
 class Servo(ControlSurface):
+	"""This class defines the behavior of a 1-2 ms servo"""
 	def __init__(self, channel, freq, neutral=1500, run=False):
 		super(Servo).__init__(self, channel, freq)
 		self.neutral = neutral
@@ -78,6 +85,9 @@ class Servo(ControlSurface):
 		pass
 
 class ESC(ControlSurface):
+	"""This class defines the behavior of a 1-2 ms AC motor electronic speed
+	controller
+	"""
 	def __init__(self, channel, freq, neutral=1000, run=False):
 		super(ESC).__init__(self, channel, freq)
 		self.neutral = neutral
