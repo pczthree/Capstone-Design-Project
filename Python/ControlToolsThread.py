@@ -70,9 +70,16 @@ class ControlSurface(object):
 				c.append(pwt.measure_pw_us(channel))
 			x_ = x
 		self.neutral = sum(c)/len(c)
+		
+	def get_pw(self):
+		pwt.measure_pw(self.channel)
 
 class Servo(ControlSurface):
-	"""This class defines the behavior of a 1-2 ms servo"""
+	"""This class defines the behavior of a 1-2 ms servo on Raspberry Pi pin
+	*channel* with frequency *freq* and a neutral pulse width of *neutral*
+	microseconds. *run* indicates whether instantiation will start a daemon
+	process for an update loop.
+	"""
 	def __init__(self, channel, freq, neutral=1500, run=False):
 		super(Servo).__init__(self, channel, freq)
 		self.neutral = neutral
@@ -86,7 +93,9 @@ class Servo(ControlSurface):
 
 class ESC(ControlSurface):
 	"""This class defines the behavior of a 1-2 ms AC motor electronic speed
-	controller
+	controller  on Raspberry Pi pin *channel* with frequency *freq* and a
+	neutral pulse width of *neutral* microseconds. *run* indicates whether
+	instantiation will start a daemon process for an update loop.
 	"""
 	def __init__(self, channel, freq, neutral=1000, run=False):
 		super(ESC).__init__(self, channel, freq)
@@ -98,3 +107,4 @@ class ESC(ControlSurface):
 	def main(self):
 		# update loop goes here
 		pass
+
