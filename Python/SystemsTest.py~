@@ -60,10 +60,10 @@ elevator_out = 1
 motor_out = 2
 rudder_out = 3
 
-aileron = ct.Servo(aileron_out, freq)
-elevator = ct.Servo(elevator_out, freq)
-motor = ct.ESC(motor_out, freq)
-rudder = ct.Servo(rudder_out, freq)
+aileron = ct.ControlTools(aileron_out, freq)
+elevator = ct.ControlTools(elevator_out, freq)
+motor = ct.ControlTools(motor_out, freq)
+rudder = ct.ControlTools(rudder_out, freq)
 
 
 print('Outputs initialized')

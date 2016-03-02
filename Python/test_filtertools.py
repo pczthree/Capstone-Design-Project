@@ -24,3 +24,11 @@ print filt1.overshoot()
 print filt1.rtfilter(7, np.arange(3)+1, np.arange(3)+2)
 print filt1.get_coef()['b']
 print filt1.get_coef()['a']
+
+a = np.random.random(50)
+af = filt1.filter(a)
+
+
+
+print a
+print af
