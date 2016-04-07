@@ -28,7 +28,7 @@ plt.axis([0, Ns*Rs, -0.5, 1.5])
 gca.suptitle('Input With WGN', fontsize = 18)
 
 ## Generate filter coefficients
-b, a = sig.cheby2(2, 20, 0.4, 'low', analog=False, output='ba')
+b, a = sig.cheby2(100, 20, 0.2, 'low', analog=False, output='ba')
 Yc = sig.lfilter(b, a, X)
 Ycn = sig.lfilter(b, a, Xn)
 
