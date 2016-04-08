@@ -17,57 +17,61 @@ class ControlSurface(object):
 		self.freq = freq
 		self.max = 2000
 		self.min = 1000
+		self.neutral=1500
 		
-		pwm.setPWMFreq(freq)
+		pwt.setPWMFreq(freq)
 		self.pulse_length = 1000000/(freq*4096)
 
-	def reset(self):
-		set_pw(self.channel, self.neutral)
-
-	def set_pw(self, time): # in us
+	def set_pw(self, time, midpoint): # in us
+		self.neutral=midpoint
 		if time > self.max:
 			time = self.max
 		elif time < self.min:
 			time = self.min
-		num_pulses = int(time/self.pulse_length)
-		pwm.setPWM(self.channel, 0, num_pulses)
 
-	def calibrate_ROM(self):
+		num_pulses = int(time/self.pulse_length)
+		pwt.setPWM(self.channel, 0, num_pulses)
+
+	def reset(self):
+		self.set_pw(self.channel, self.neutral)
+
+
+	def calibrate_rom(self):	#Adjust range of motion
 		threshold = 50
 		x_ = self.neutral
 
 		#hold min
 		m = []
 		for ii in range (10):
-			x = pwt.measure_pw_us(channel)
+			x = pwt.measure_pw_us(self.channel)
 			# will usually throw away the first point
 			if np.absolute(x - x_) > threshold:
 				ii -= 1
 			else:
-				m.append(pwt.measure_pw_us(channel))
+				m.append(pwt.measure_pw_us(self.channel))
 			x_ = x
 		self.min = sum(m)/len(m)
 
 		#hold max
 		M = []
 		for ii in range (10):
-			x = pwt.measure_pw_us(channel)
+			x = pwt.measure_pw_us(self.channel)
 			# will usually throw away the first point
 			if np.absolute(x - x_) > threshold:
 				ii -= 1
 			else:
-				M.append(pwt.measure_pw_us(channel))
+				M.append(pwt.measure_pw_us(self.channel))
 			x_ = x
 		self.max = sum(M)/len(M)
 
 		c = []
 		for ii in range (10):
-			x = pwt.measure_pw_us(channel)
+			x = pwt.measure_pw_us(self.channel)
 			# will usually throw away the first point
 			if np.absolute(x - x_) > threshold:
 				ii -= 1
 			else:
-				c.append(pwt.measure_pw_us(channel))
+				c.append(pwt.measure_pw_us(self.channel))
 			x_ = x
 		self.neutral = sum(c)/len(c)
 

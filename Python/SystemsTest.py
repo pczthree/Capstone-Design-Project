@@ -29,10 +29,10 @@ print('Filter initialized')
 #=========================
 # INITIALIZE INPUTS	
 #=========================
-aileron_in = 33 # BCM GPIO13
-elevator_in = 
-motor_in = 
-rudder_in = 
+aileron_in = 33 # BCM GPIO13 35 is GPIO19   37 is GPIO26   38 is GPIO20
+elevator_in = 35
+motor_in = 38
+rudder_in = 37
 
 
 gpio.setmode(gpio.BOARD)
@@ -55,7 +55,7 @@ print('Timing variables initialized')
 #=========================
 # INITIALIZE OUTPUTS	
 #=========================
-aileron_out = 0 # Servo driver board
+aileron_out = 0 # Servo driver board on frequency calibrated earlier
 elevator_out = 1
 motor_out = 2
 rudder_out = 3
@@ -76,7 +76,7 @@ ofile = open('signal.csv','wb')
 w = csv.writer(ofile, delimiter=',',quoting=csv.QUOTE_NONE)
 
 print('Write stream initialized')
-w.writerow([aileron, elevator, motor rudder])
+w.writerow([aileron, elevator, motor, rudder])
 
 #=========================
 # EXECUTE PROCESSES
