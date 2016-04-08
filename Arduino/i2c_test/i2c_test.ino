@@ -14,7 +14,7 @@ void setup() {
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
   
-  Serial.println(“Ready!”);
+  Serial.println("Ready!");
 }
 
 void loop() {
@@ -26,7 +26,7 @@ void receiveData(int byteCount){
 
   while(Wire.available()) {
     number = Wire.read();
-    Serial.print(“data received: “);
+    Serial.print("data received: ");
     Serial.println(number);
   
     if (number == 1){
