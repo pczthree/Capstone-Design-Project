@@ -1,11 +1,11 @@
-#include <SoftwareSerial.h>
 #include <Adafruit_GPS.h>
 #include <Adafruit_LSM303_U.h>
 #include <Adafruit_L3GD20_U.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_9DOF.h>
-#include <Wire.h>
 #include <math.h>
+#include <SoftwareSerial.h>
+#include <Wire.h>
 
 //INTERFACE INFO:
 const int buttonPin = 2;     // the number of the pushbutton pin
@@ -13,7 +13,7 @@ const int ledPin =  13;      // the number of the LED pin
 int buttonState = 0;         // variable for reading the pushbutton status
 
 //COMS INFO:
-//#define SLAVE_ADDRESS 0x04
+#define SLAVE_ADDRESS 0x05
 int number = 0;
 int state = 0;
 int print_count = 0;
@@ -38,11 +38,14 @@ Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
 Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
 
 
-String build() {
-  if (GPS.fix) {
+String build()
+{
+  if (GPS.fix)
+  {
     fixdata = String(GPS.latitudeDegrees), +',' + String(GPS.longitudeDegrees) + ',' + String(GPS.speed) + ',' + String(GPS.altitude);
   }
-  else {
+  else
+  {
     fixdata = ("0,0,0,0");
   }
   out = String(pitch) + ',' + String(roll) + ',' + String(yaw) + ',' + String(GPS.hour) + ',' + String(GPS.minute) + ',' + String(GPS.seconds) + ',' + fixdata;
@@ -72,7 +75,7 @@ void receiveData(int byteCount) {
 }
 
 void sendData() {
-  Wire.write(build());
+  //Wire.write(build());
 }
 
 void setup() {
@@ -81,7 +84,7 @@ void setup() {
   // initialize the pushbutton pin as an input:
   pinMode(buttonPin, INPUT);
   // initialize serial coms
-  Serial.begin(115200);   // initialize i2c as slave
+  Serial.begin(9600);   // initialize i2c as slave
 
   Wire.begin(SLAVE_ADDRESS);
   // define callbacks for i2c communication
@@ -141,7 +144,7 @@ void loop() {           //MAIN LOOP
     {
       yaw = orientation.heading;
     }
-    Serial.println(build());
+    Serial.print("\r" + build() + "   ");
   }
 
 }
