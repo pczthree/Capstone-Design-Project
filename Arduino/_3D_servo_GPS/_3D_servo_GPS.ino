@@ -1,3 +1,5 @@
+#include <SoftwareSerial.h>
+#include <Adafruit_GPS.h>
 #include <Adafruit_LSM303_U.h>
 #include <Adafruit_L3GD20_U.h>
 #include <Adafruit_Sensor.h>
@@ -5,6 +7,9 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <math.h>
+
+SoftwareSerial gpsSerial(9, 8);
+Adafruit_GPS GPS(&gpsSerial);
 
 const int buttonPin = 2;     // the number of the pushbutton pin
 const int ledPin =  13;      // the number of the LED pin
@@ -25,7 +30,6 @@ double pos = 0;
 double ptheta = 0;
 double rtheta = 0;
 double ytheta = 0;
-
 float pdeadband = 3.0;
 float rdeadband = 3.0;
 float ydeadband = 3.0;
@@ -49,11 +53,11 @@ void initSensors()
     Serial.println(F("Ooops, no LSM303 detected ... Check your wiring!"));
     while (1);
   }
-    if(!mag.begin())
+  if (!mag.begin())
   {
     /* There was a problem detecting the LSM303 ... check your connections */
     Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
-    while(1);
+    while (1);
   }
 }
 
@@ -71,17 +75,29 @@ void setup() {
   pinMode(buttonPin, INPUT);
   // initialize serial coms
   Serial.begin(115200);
+  GPS.begin(9600);
 
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);  //Turns on RMC (recommended minimum) and GGA (fix data) including altitude
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
+
+  delay(1000);
   initServos();
   initSensors();
 
 }
+
 
 void loop() {
 
   sensors_event_t accel_event;
   sensors_event_t mag_event;
   sensors_vec_t   orientation;
+  // read data from the GPS
+  char c = GPS.read();
+  if (GPS.newNMEAreceived()) {
+    if (!GPS.parse(GPS.lastNMEA()))
+      return;
+  }
 
   /* Calculate pitch and roll from the raw accelerometer data */
   accel.getEvent(&accel_event);
@@ -119,6 +135,7 @@ void loop() {
   }
   if (print_count == print_count_)
   {
+    
     Serial.print(F("\rPitch: "));
     Serial.print((int)pitch_);
     Serial.print(F(";  ptheta: "));
@@ -134,6 +151,11 @@ void loop() {
     Serial.print(F(";  ytheta: "));
     Serial.print((int)ytheta);
     Serial.print("    ");
+    Serial.print("Time: ");
+    Serial.print(GPS.hour, DEC); Serial.print(':');
+    Serial.print(GPS.minute, DEC); Serial.print(':');
+    Serial.print(GPS.seconds, DEC); Serial.print('.');
+    Serial.print(GPS.milliseconds);
     print_count = 0;
 
   }
