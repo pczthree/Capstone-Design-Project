@@ -1,7 +1,6 @@
 #include <Wire.h>
 
 #define SLAVE_ADDRESS 0x05
-int number = 0;
 int state = 0;
 
 int randNum = 0;
@@ -11,6 +10,7 @@ int index = 0;
 String dataString = " ";
 uint8_t nums[2];
 
+byte n[1000];
 
 void setup() {
   pinMode(13, OUTPUT);
@@ -29,34 +29,20 @@ void loop() {
   nums[0] = random(256);
   nums[1] = random(256);
   randNum = random(256);
-  dataString = "Your number is: " + String(randNum);
-  Serial.println(dataString.length());
-  char *point = makeCharArray(dataString);
-  for (int i = 0; i <= dataString.length(); i++) Serial.print(*(point + i));
-  Serial.println("");
+  //Serial.println(dataString.length());
+  //byte *point = makeByteArray(dataString);
+  //for (int i = 0; i <= dataString.length(); i++) Serial.println(*(point + i));
+  //Serial.println(*point);
+  //Serial.println("");
   //Serial.print("\r" + dataString);
   delay(1000);
 }
 
 // callback for received data
 void receiveData(int byteCount){
-  while(Wire.available()) {
-    number = Wire.read();
-    Serial.print("data received: ");
-    Serial.println(number);
-  
-    if (number == 1){
-    
-      if (state == 0){
-        digitalWrite(13, HIGH); // set the LED on
-        state = 1;
-      }
-      else{
-        digitalWrite(13, LOW); // set the LED off
-        state = 0;
-      }
-    }
-  }
+  bool shouldReset = Wire.read();
+  if (shouldReset == 1) index = 0;
+  Serial.println("received data");
 }
   
 // callback for sending data
@@ -83,24 +69,38 @@ void sendData1(){
 
 void sendData2()
 {
-  char *byte_nums = 0;
-  int len = dataString.length() + 1;
-  if (index == 0) char *byte_nums = makeCharArray(dataString);
-  
-  Wire.write(*(byte_nums + index));
+  String outString = buildString();
+  //int len = outString.length() + 1;
+  //if (index == 0) *byte_nums = makeByteArray(dataString);
+  if (index == 0) buildByteArray(outString);
+  //byte toWrite = *byte_nums;
+  byte toWrite = n[index];
+  Serial.println(toWrite);
+  Wire.write(toWrite);
   index++;
-  
+  /*
   if (index >= len)
   {
     index = 0;
     Wire.write(',');
   }
+  */
 }
 
-char * makeCharArray(String s)
+byte * makeByteArray(String s)
 {
-  char n[32];
-  s.toCharArray(n, s.length()+1);
+  byte n[1000];
+  s.getBytes(n, 1000);
   return n;
+}
+
+void buildByteArray(String s)
+{
+  s.getBytes(n, 1000);
+}
+
+String buildString()
+{
+  return "Your number is: " + String(randNum);
 }
 
