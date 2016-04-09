@@ -28,14 +28,19 @@ def readArray():
 	byte_list = []
 	while byte_in != 0:
 		byte_in = bus.read_byte(address)
+		time.sleep(0.005)
 		byte_list.append(byte_in)
-
+	# for i in range(5):
+		# byte_list.append(bus.read_byte(address))
 	return byte_list
 
 while True:
 	# number = readNumber()
 	my_list = readArray()
-	print('The list: ')
-	print(my_list)
+	del my_list[-1]
+	# print('The list: ')
+	# print(my_list)
+	for ii in range(len(my_list)):
+		stdout.write(str(unichr(int(my_list[ii]))))
 	stdout.write('\n')
 	time.sleep(1)
