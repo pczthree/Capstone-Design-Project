@@ -7,17 +7,12 @@
 #include <SoftwareSerial.h>
 #include <Wire.h>
 
-//INTERFACE INFO:
-const int buttonPin = 2;     // the number of the pushbutton pin
-const int ledPin =  13;      // the number of the LED pin
-int buttonState = 0;         // variable for reading the pushbutton status
+#define SLAVE_ADDRESS 0x05
+int index = 0;
+byte n[500];
+uint32_t timer = millis();
 
 //COMS INFO:
-#define SLAVE_ADDRESS 0x05
-int number = 0;
-int state = 0;
-int print_count = 0;
-int print_count_ = 200;
 String out = "";
 String fixdata = "";
 
@@ -38,52 +33,38 @@ Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
 Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
 
 
-String build()
+String buildString()
 {
   if (GPS.fix)
-  {
-    fixdata = String(GPS.latitudeDegrees), +',' + String(GPS.longitudeDegrees) + ',' + String(GPS.speed) + ',' + String(GPS.altitude);
-  }
-  else
-  {
-    fixdata = ("0,0,0,0");
-  }
-  out = String(pitch) + ',' + String(roll) + ',' + String(yaw) + ',' + String(GPS.hour) + ',' + String(GPS.minute) + ',' + String(GPS.seconds) + ',' + fixdata;
+    fixdata = String(GPS.latitudeDegrees), +',' + String(GPS.longitudeDegrees) +
+      ',' + String(GPS.speed) + ',' + String(GPS.altitude);
+  else fixdata = ("0,0,0,0");
+  
+  out = String(pitch) + ',' + String(roll) + ',' + String(yaw) + ',' +
+    String(GPS.hour) + ',' + String(GPS.minute) + ',' + String(GPS.seconds) + ',' + fixdata;
 
   return out;
 }
 
-void receiveData(int byteCount) {
-
-  while (Wire.available()) {
-    number = Wire.read();
-    Serial.print("data received: ");
-    Serial.println(number);
-
-    if (number == 1) {
-
-      if (state == 0) {
-        digitalWrite(13, HIGH); // set the LED on
-        state = 1;
-      }
-      else {
-        digitalWrite(13, LOW); // set the LED off
-        state = 0;
-      }
-    }
-  }
+void receiveData(int byteCount)
+{
+  bool shouldReset = Wire.read();
+  if (shouldReset == 1) index = 0;
 }
 
-void sendData() {
-  //Wire.write(build());
+void sendData()
+{
+  if (index == 0) buildByteArray(buildString());
+  Wire.write(n[index]);
+  index++;
+}
+
+void buildByteArray(String s)
+{
+  s.getBytes(n, 1000);
 }
 
 void setup() {
-  // initialize the LED pin as an output:
-  pinMode(ledPin, OUTPUT);
-  // initialize the pushbutton pin as an input:
-  pinMode(buttonPin, INPUT);
-  // initialize serial coms
   Serial.begin(9600);   // initialize i2c as slave
 
   Wire.begin(SLAVE_ADDRESS);
@@ -98,6 +79,8 @@ void setup() {
 
   delay(1000);
   initSensors();
+  Serial.println("Sensors ready");
+  
 }
 
 void initSensors()
@@ -116,15 +99,14 @@ void initSensors()
   }
 }
 
-uint32_t timer = millis();
-
-void loop() {           //MAIN LOOP
+void loop()
+{
   char c = GPS.read();
   if (GPS.newNMEAreceived()) {
     if (!GPS.parse(GPS.lastNMEA()))
       return;
   }
-  if (timer > millis())  timer = millis();
+  if (timer > millis()) timer = millis();
 
   if (millis() - timer > 100) {
     timer = millis(); // reset the timer
@@ -141,10 +123,7 @@ void loop() {           //MAIN LOOP
     }
     mag.getEvent(&mag_event);
     if (dof.magGetOrientation(SENSOR_AXIS_Z, &mag_event, &orientation))
-    {
       yaw = orientation.heading;
-    }
-    Serial.print("\r" + build() + "   ");
+    //Serial.print("\r" + build() + "   ");
   }
-
 }
