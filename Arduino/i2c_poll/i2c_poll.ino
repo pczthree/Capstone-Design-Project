@@ -24,7 +24,8 @@ void loop()
   delay(1000);
 }
 
-void receiveData(int byteCount){
+void receiveData(int byteCount)
+{
   bool shouldReset = Wire.read();
   if (shouldReset == 1) index = 0;
 }
