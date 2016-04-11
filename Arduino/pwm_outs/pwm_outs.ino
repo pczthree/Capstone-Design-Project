@@ -7,9 +7,9 @@
 #include <Servo.h>
 #include <math.h>
 
-Servo pitch;
-Servo roll;
-Servo yaw;
+Servo pitcho;
+Servo rollo;
+Servo yawo;
 
 
 //COMS INFO:
@@ -24,31 +24,14 @@ Adafruit_GPS GPS(&gpsSerial);
 boolean usingInterrupt = true;
 
 //GYRO/ACCEL INFO:
-double pitcho = 0.0;
-double yawo = 0;
-double rollo = 0;
+double pitch = 0.0;
+double yaw = 0;
+double roll = 0;
 double pos = 0;
 
 Adafruit_9DOF                 dof   = Adafruit_9DOF();
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
 Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
-
-
-void setup() {
-  pitcho.attach(3);
-  rollo.attach(5);
-  yawo.attach(6);
-  // initialize serial coms
-  Serial.begin(115200);   // initialize i2c as slave
-
-
-  GPS.begin(9600);
-  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);  //Turns on RMC (recommended minimum) and GGA (fix data) including altitude
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
-
-  delay(1000);
-  initSensors();
-}
 
 void initSensors()
 {
@@ -65,6 +48,23 @@ void initSensors()
     while (1);
   }
 }
+void setup() {
+  pitcho.attach(3);
+  rollo.attach(5);
+  yawo.attach(6);
+  // initialize serial coms
+  Serial.begin(115200);   // initialize i2c as slave
+
+
+  GPS.begin(9600);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);  //Turns on RMC (recommended minimum) and GGA (fix data) including altitude
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
+
+  delay(1000);
+  initSensors();
+}
+
+
 
 uint32_t timer = millis();
 
@@ -76,7 +76,7 @@ void loop() {           //MAIN LOOP
   }
   if (timer > millis())  timer = millis();
 
-  if (millis() - timer > 50) {
+  if (millis() - timer > 20) {
     timer = millis(); // reset the timer
     sensors_event_t accel_event;
     sensors_event_t mag_event;
