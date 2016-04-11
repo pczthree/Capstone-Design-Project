@@ -32,7 +32,7 @@ void loop() {
   //Serial.println(dataString.length());
   //byte *point = makeByteArray(dataString);
   //for (int i = 0; i <= dataString.length(); i++) Serial.println(*(point + i));
-  //Serial.println(*point);
+  //Serial.println();
   //Serial.println("");
   //Serial.print("\r" + dataString);
   delay(1000);
@@ -42,7 +42,6 @@ void loop() {
 void receiveData(int byteCount){
   bool shouldReset = Wire.read();
   if (shouldReset == 1) index = 0;
-  Serial.println("received data");
 }
   
 // callback for sending data
@@ -75,7 +74,7 @@ void sendData2()
   if (index == 0) buildByteArray(outString);
   //byte toWrite = *byte_nums;
   byte toWrite = n[index];
-  Serial.println(toWrite);
+  //Serial.println(toWrite);
   Wire.write(toWrite);
   index++;
   /*
