@@ -76,7 +76,7 @@ void loop() {           //MAIN LOOP
   }
   if (timer > millis())  timer = millis();
 
-  if (millis() - timer > 20) {
+  if (millis() - timer > 500) {
     timer = millis(); // reset the timer
     sensors_event_t accel_event;
     sensors_event_t mag_event;
