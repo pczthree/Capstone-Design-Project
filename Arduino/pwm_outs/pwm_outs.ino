@@ -52,6 +52,8 @@ void setup() {
   pitcho.attach(3);
   rollo.attach(5);
   yawo.attach(6);
+
+  
   // initialize serial coms
   Serial.begin(115200);   // initialize i2c as slave
 
