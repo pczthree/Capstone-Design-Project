@@ -144,7 +144,7 @@ void loop() {           //MAIN LOOP
     {
       yaw = orientation.heading;
     }
-    Serial.print("\n" + build());
+    Serial.write( build()+"\n");
   }
 
 }
