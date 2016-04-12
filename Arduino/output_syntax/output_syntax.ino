@@ -75,7 +75,7 @@ void receiveData(int byteCount) {
 }
 
 void sendData() {
-  //Wire.write(build());
+  Wire.write(build());
 }
 
 void setup() {
