@@ -13,7 +13,7 @@
 //int buttonState = 0;         // variable for reading the pushbutton status
 
 //COMS INFO:
-#define SLAVE_ADDRESS 0x05
+//#define SLAVE_ADDRESS 0x05
 int number = 0;
 int state = 0;
 int print_count = 0;
@@ -84,7 +84,7 @@ void setup() {
 //  // initialize the pushbutton pin as an input:
 //  pinMode(buttonPin, INPUT);
 //  // initialize serial coms
-//  Serial.begin(9600);   // initialize i2c as slave
+Serial.begin(9600);   
 //
 //  Wire.begin(SLAVE_ADDRESS);
 //  // define callbacks for i2c communication
@@ -144,7 +144,7 @@ void loop() {           //MAIN LOOP
     {
       yaw = orientation.heading;
     }
-    Serial.print("\r" + build() + "   ");
+    Serial.print("\n" + build());
   }
 
 }
