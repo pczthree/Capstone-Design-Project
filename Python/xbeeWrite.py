@@ -122,6 +122,7 @@ def send_message_blk( msg ):
 		written = ser.write(msg[i:i+16])
 		ser.flush()
 		i+=written
+	ser.write('\n')
 
 
 
@@ -143,6 +144,7 @@ while 1:
 	# Send what was in the shared memory out the serial port
 	#
 	send_message_blk(msg)
+	time.sleep(0.1)
 
 
 	#
