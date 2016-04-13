@@ -48,7 +48,7 @@ String build()
 //  {
 //    fixdata = ("0,0,0,0");
 //  }
-  out = String(pitch) + ',' + String(roll) + ',' + String(yaw);// + ',' + String(GPS.hour) + ',' + String(GPS.minute) + ',' + String(GPS.seconds) + ',' + fixdata;
+  out = String(pitch) + ',' + String(roll) + ',' + String(yaw) + '\n';// + ',' + String(GPS.hour) + ',' + String(GPS.minute) + ',' + String(GPS.seconds) + ',' + fixdata + '\n';
 
   return out;
 }
@@ -84,7 +84,7 @@ void setup() {
 //  // initialize the pushbutton pin as an input:
 //  pinMode(buttonPin, INPUT);
 //  // initialize serial coms
-Serial.begin(9600);   
+  Serial.begin(9600);   
 //
 //  Wire.begin(SLAVE_ADDRESS);
 //  // define callbacks for i2c communication
@@ -144,7 +144,7 @@ void loop() {           //MAIN LOOP
     {
       yaw = orientation.heading;
     }
-    Serial.write( build()+"\n");
+    Serial.write(build().c_str());
   }
 
 }
